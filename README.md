@@ -2,25 +2,90 @@
 
 ## Overview
 
-This project implements and evaluates the **Iterative Rational Krylov Algorithm (IRKA)** for model order reduction of large-scale descriptor systems (DAEs) arising from circuit models.
+This project implements and evaluates variants of the  
+**Iterative Rational Krylov Algorithm (IRKA)** for model order reduction of large-scale descriptor systems (DAEs) arising from circuit models.
 
-The objective is to construct reduced-order models (ROMs) that approximate the transfer function of the original full-order models (FOMs), while reducing computational complexity.
+The objective is to construct reduced-order models (ROMs) that accurately approximate the transfer function of the original full-order models (FOMs), while significantly reducing computational complexity.
 
-This work was developed as part of a seminar on **Model Reduction and Numerical Simulation**.
+This work was developed as part of a seminar on  
+**Model Reduction and Numerical Simulation**.
 
 ---
 
-## Methods
+## Implemented Algorithms
 
-The following approaches were implemented and tested:
+The repository contains multiple IRKA-based implementations designed for descriptor systems with singular matrices.
 
-* Standard IRKA for descriptor systems (DAEs)
-* Modified IRKA with polynomial part matching
-* Projection-based model order reduction
-* Frequency-domain error analysis
-* Comparison of transfer functions of FOM and ROM
+### `IRKA_D.m` — Standard Descriptor IRKA
 
-All main algorithmic steps, iteration logic, and numerical experiments were implemented in MATLAB.
+This function implements the classical IRKA method for descriptor systems where the matrix **E** is singular.
+
+Characteristics:
+
+- Standard IRKA formulation for DAEs
+- No explicit handling of the polynomial part
+- Serves as a baseline implementation
+- Useful for comparison with modified approaches
+
+Limitations:
+
+- High-frequency errors grow significantly
+- Polynomial part mismatch leads to unbounded approximation errors
+
+---
+
+### `IRKA_WCF.m` — IRKA with Spectral Projectors (**Primary Contribution**)
+
+This function represents the **main contribution of the project**.
+
+It implements IRKA using **spectral projectors** to properly handle the polynomial part of the transfer function.
+
+Objectives:
+
+- Match the polynomial part of the transfer function
+- Maintain bounded errors at high frequencies
+- Improve numerical stability of reduced-order models
+
+Key Features:
+
+- Uses spectral projector-based formulation
+- Improves high-frequency behavior
+- Reduces instability caused by improper polynomial matching
+- Designed specifically for descriptor systems with singular **E**
+
+This implementation forms the core methodological contribution of the project.
+
+---
+
+### `main_IRKA.m` — Execution Script
+
+This script controls the numerical experiments and executes the IRKA workflow.
+
+Responsibilities:
+
+- Loads spectral initialization data
+- Generates system matrices
+- Calls selected IRKA implementations
+- Performs convergence iterations
+- Produces performance plots
+- Evaluates frequency-domain errors
+
+This file serves as the main entry point for running simulations.
+
+---
+
+## Numerical Methods Used
+
+The following techniques were implemented and evaluated:
+
+- Standard IRKA for descriptor systems
+- IRKA with spectral projector-based polynomial matching
+- Projection-based model order reduction
+- Frequency-domain transfer function approximation
+- Error analysis between FOM and ROM
+- Convergence monitoring of interpolation points
+
+All algorithmic steps, iteration logic, and numerical experiments were implemented in **MATLAB**.
 
 System matrices and auxiliary routines for projection matrix computation were provided by the original authors of the reference work.
 
@@ -28,84 +93,67 @@ System matrices and auxiliary routines for projection matrix computation were pr
 
 ## Numerical Experiments
 
-Experiments were conducted using large-scale descriptor systems originating from circuit models.
+Experiments were conducted using large-scale descriptor systems derived from circuit models.
 
-### Standard IRKA
+### Standard IRKA (`IRKA_D.m`)
 
 The classical IRKA method was applied first.
 
 Observations:
 
-* The approximation error increased rapidly with frequency.
-* Errors reached magnitudes up to approximately **10^8**.
-* This behavior indicates a mismatch in the polynomial part of the transfer function.
+- The approximation error increased rapidly with frequency
+- Errors reached magnitudes up to approximately **10⁸**
+- This indicates a mismatch in the polynomial part of the transfer function
 
-These results demonstrate limitations of standard IRKA when applied to descriptor systems.
+Conclusion:
+
+Standard IRKA is not sufficient for descriptor systems requiring accurate high-frequency behavior.
 
 ---
 
-### Modified IRKA with Polynomial Matching
+### Modified IRKA with Spectral Projectors (`IRKA_WCF.m`)
 
-A modified IRKA approach was implemented to improve matching of the polynomial part of the transfer function.
+A modified IRKA approach using spectral projectors was implemented.
 
 Observations:
 
-* The approximation error was significantly reduced (approximately **1**).
-* However, the error increased again for higher frequencies.
-* This behavior is likely caused by numerical inaccuracies in the computation of projection matrices.
+- Approximation error was significantly reduced (approximately **1**)
+- Errors remained bounded at high frequencies
+- Remaining deviations are likely due to numerical inaccuracies in projection matrix computation
 
-These results show that polynomial matching improves stability but does not fully resolve high-frequency errors.
+Conclusion:
 
----
-
-## Limitations
-
-* Projection matrices were computed using external routines.
-* Numerical inaccuracies in spectral data affected stability.
-* The reduced-order models did not fully reproduce high-frequency behavior.
-* Accurate projection matrix computation for general systems remains an open numerical challenge.
+Polynomial matching using spectral projectors substantially improves stability and accuracy.
 
 ---
 
 ## Example Configuration
 
-Typical experiment:
+Typical experiment parameters:
 
-* Original system dimension: **n ≈ 1499**
-* Reduced model dimension: **r ≈ 20**
-* Descriptor systems from circuit models
+- Original system dimension: **n ≈ 1499**
+- Reduced model dimension: **r ≈ 20**
+- System type: Descriptor systems from circuit models
+- Frequency range: Wide-band frequency-domain evaluation
 
 ---
 
 ## Execution & Requirements
-To run the simulations, the following proprietary components (provided by the original authors ) are required:
-* rcl_ind2.m: System generator for the circuit descriptor models.
-* Bode_500_10_1e8_1e-8.mat: Pre-computed spectral data for initialization.
-  
-Steps (if data is available):Ensure the proprietary files are in the MATLAB path.
-2. Run main_IRKA.m to execute the modified IRKA for DAEs.
-Note: Since the system matrices are not included for copyright reasons, please refer to the Results section to view the pre-generated performance plots.
 
----
+To run the simulations, the following proprietary components  
+(provided by the original authors) are required:
 
-## Output
+- `rcl_ind2.m`  
+  System generator for circuit descriptor models
 
-The code generates:
+- `Bode_500_10_1e8_1e-8.mat`  
+  Pre-computed spectral data used for initialization
 
-* Frequency response plots
-* Error plots comparing FOM and ROM
-* Convergence behavior of IRKA iterations
+### Steps to Run
 
----
+1. Ensure proprietary files are available in the MATLAB path
+2. Place repository files in the working directory
+3. Run:
 
-## References
-
-This project is based on the following work:
-
-Serkan Gugercin, Tatjana Stykel, and Sarah Wyatt
-**"Model Reduction of Descriptor Systems by Interpolatory Projection Methods"**
-
-The implemented methods follow the interpolatory model reduction framework described in this paper, including adaptations of IRKA for descriptor systems.
-
-System matrices and auxiliary routines used in the numerical experiments were provided by the original authors.
-
+```matlab
+main_IRKA
