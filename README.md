@@ -5,10 +5,30 @@
 This project implements and evaluates variants of the  
 **Iterative Rational Krylov Algorithm (IRKA)** for model order reduction of large-scale descriptor systems (DAEs) arising from circuit models.
 
-The objective is to construct reduced-order models (ROMs) that accurately approximate the transfer function of the original full-order models (FOMs), while significantly reducing computational complexity.
+The objective is to construct reduced-order models (ROMs) that approximate the transfer function of the original full-order models (FOMs), while significantly reducing computational complexity.
 
 This work was developed as part of a seminar on  
 **Model Reduction and Numerical Simulation**.
+
+---
+
+## Repository Structure
+
+The repository is organized as follows:
+
+MOR-Descriptor-Systems-IRKA/
+│
+├── src/
+│   ├── IRKA_WCF.m     % IRKA with spectral projectors (primary contribution)
+│   ├── IRKA_D.m       % Standard IRKA for descriptor systems
+│   └── main_IRKA.m    % Main execution script
+│
+├── figures/           % Pre-generated numerical results
+│   ├── (error plots)
+│   ├── (frequency response plots)
+│   └── (convergence plots)
+│
+└── README.md          % Project documentation
 
 ---
 
@@ -22,15 +42,15 @@ This function implements the classical IRKA method for descriptor systems where 
 
 Characteristics:
 
-- Standard IRKA formulation for DAEs
-- No explicit handling of the polynomial part
+- Standard IRKA formulation for descriptor systems
+- No explicit polynomial part matching
 - Serves as a baseline implementation
-- Useful for comparison with modified approaches
+- Used for comparison with modified methods
 
 Limitations:
 
-- High-frequency errors grow significantly
-- Polynomial part mismatch leads to unbounded approximation errors
+- High-frequency errors increase significantly
+- Polynomial part mismatch leads to unstable approximation behavior
 
 ---
 
@@ -38,54 +58,53 @@ Limitations:
 
 This function represents the **main contribution of the project**.
 
-It implements IRKA using **spectral projectors** to properly handle the polynomial part of the transfer function.
+It implements IRKA using **spectral projectors** to handle the polynomial part of the transfer function in descriptor systems.
 
 Objectives:
 
-- Match the polynomial part of the transfer function
-- Maintain bounded errors at high frequencies
-- Improve numerical stability of reduced-order models
+- Improve matching of the polynomial part of the transfer function
+- Maintain bounded approximation errors
+- Improve high-frequency behavior of reduced models
 
 Key Features:
 
 - Uses spectral projector-based formulation
-- Improves high-frequency behavior
-- Reduces instability caused by improper polynomial matching
-- Designed specifically for descriptor systems with singular **E**
-
-This implementation forms the core methodological contribution of the project.
+- Designed for descriptor systems with singular **E**
+- Improves numerical stability compared to standard IRKA
+- Reduces errors caused by polynomial mismatch
 
 ---
 
 ### `main_IRKA.m` — Execution Script
 
-This script controls the numerical experiments and executes the IRKA workflow.
+This script controls the numerical experiments and runs the IRKA workflow.
 
 Responsibilities:
 
 - Loads spectral initialization data
-- Generates system matrices
-- Calls selected IRKA implementations
-- Performs convergence iterations
-- Produces performance plots
-- Evaluates frequency-domain errors
+- Generates descriptor system matrices
+- Calls IRKA implementations
+- Performs iterative updates
+- Computes reduced-order models
+- Generates performance plots
+- Evaluates frequency-domain approximation errors
 
-This file serves as the main entry point for running simulations.
+This file serves as the main entry point of the project.
 
 ---
 
-## Numerical Methods Used
+## Numerical Methods
 
-The following techniques were implemented and evaluated:
+The following numerical techniques were implemented and tested:
 
 - Standard IRKA for descriptor systems
 - IRKA with spectral projector-based polynomial matching
 - Projection-based model order reduction
 - Frequency-domain transfer function approximation
 - Error analysis between FOM and ROM
-- Convergence monitoring of interpolation points
+- Monitoring of IRKA convergence
 
-All algorithmic steps, iteration logic, and numerical experiments were implemented in **MATLAB**.
+All algorithmic steps and numerical experiments were implemented in **MATLAB**.
 
 System matrices and auxiliary routines for projection matrix computation were provided by the original authors of the reference work.
 
@@ -93,37 +112,47 @@ System matrices and auxiliary routines for projection matrix computation were pr
 
 ## Numerical Experiments
 
-Experiments were conducted using large-scale descriptor systems derived from circuit models.
+Experiments were conducted using large-scale descriptor systems originating from circuit models.
 
 ### Standard IRKA (`IRKA_D.m`)
 
-The classical IRKA method was applied first.
+The classical IRKA method was applied as a baseline.
 
 Observations:
 
 - The approximation error increased rapidly with frequency
 - Errors reached magnitudes up to approximately **10⁸**
-- This indicates a mismatch in the polynomial part of the transfer function
+- This behavior indicates a mismatch in the polynomial part of the transfer function
 
-Conclusion:
-
-Standard IRKA is not sufficient for descriptor systems requiring accurate high-frequency behavior.
+These results demonstrate the limitations of standard IRKA when applied to descriptor systems.
 
 ---
 
 ### Modified IRKA with Spectral Projectors (`IRKA_WCF.m`)
 
-A modified IRKA approach using spectral projectors was implemented.
+A modified IRKA implementation using spectral projectors was applied to improve polynomial matching.
 
 Observations:
 
-- Approximation error was significantly reduced (approximately **1**)
-- Errors remained bounded at high frequencies
-- Remaining deviations are likely due to numerical inaccuracies in projection matrix computation
+- The approximation error was significantly reduced (approximately **1**)
+- The error remained bounded over a wider frequency range
+- However, a mismatch between ROM and FOM remained at higher frequencies
 
-Conclusion:
+---
 
-Polynomial matching using spectral projectors substantially improves stability and accuracy.
+## Discussion of Results
+
+The numerical results show that the reduced-order model (ROM) does not fully match the behavior of the full-order model (FOM), particularly at higher frequencies.
+
+This mismatch is primarily caused by inaccuracies in the computation of the spectral projectors used in the modified IRKA implementation.
+
+Since the spectral projectors are not computed exactly, the polynomial part of the transfer function is not matched perfectly between the FOM and the ROM. As a result:
+
+- The polynomial parts of the transfer functions differ between FOM and ROM
+- High-frequency behavior is not reproduced accurately
+- The ROM error increases in frequency regions where polynomial matching is critical
+
+These observations highlight the sensitivity of interpolatory projection methods to the numerical accuracy of spectral projector computation.
 
 ---
 
@@ -134,7 +163,6 @@ Typical experiment parameters:
 - Original system dimension: **n ≈ 1499**
 - Reduced model dimension: **r ≈ 20**
 - System type: Descriptor systems from circuit models
-- Frequency range: Wide-band frequency-domain evaluation
 
 ---
 
@@ -151,31 +179,9 @@ To run the simulations, the following proprietary components
 
 ### Steps to Run
 
-1. Ensure proprietary files are available in the MATLAB path
+1. Ensure the proprietary files are available in the MATLAB path
 2. Place repository files in the working directory
 3. Run:
 
 ```matlab
 main_IRKA
-
----
-
-## Discussion of Results
-
-The numerical results show that the reduced-order model (ROM) does not
-fully match the behavior of the full-order model (FOM), particularly at
-higher frequencies.
-
-This mismatch is primarily caused by inaccuracies in the computation of
-the spectral projectors used in the modified IRKA implementation.
-
-Since the spectral projectors are not computed exactly, the polynomial
-part of the transfer function is not matched perfectly between the FOM
-and the ROM. As a result:
-
-- The polynomial part of the transfer function differs between FOM and ROM
-- High-frequency behavior is not reproduced accurately
-- The ROM error increases in frequency regions where polynomial matching is critical
-
-These observations highlight the sensitivity of interpolatory projection
-methods to the numerical accuracy of spectral projector computation.
