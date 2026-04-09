@@ -157,3 +157,23 @@ To run the simulations, the following proprietary components
 
 ```matlab
 main_IRKA
+
+## Discussion of Results
+
+The numerical results show that the reduced-order model (ROM) does not
+fully match the behavior of the full-order model (FOM), particularly at
+higher frequencies.
+
+This mismatch is primarily caused by inaccuracies in the computation of
+the spectral projectors used in the modified IRKA implementation.
+
+Since the spectral projectors are not computed exactly, the polynomial
+part of the transfer function is not matched perfectly between the FOM
+and the ROM. As a result:
+
+- The polynomial part of the transfer function differs between FOM and ROM
+- High-frequency behavior is not reproduced accurately
+- The ROM error increases in frequency regions where polynomial matching is critical
+
+These observations highlight the sensitivity of interpolatory projection
+methods to the numerical accuracy of spectral projector computation.
