@@ -120,6 +120,9 @@ Observations:
 
 ---
 
+## Observation
+![Error Plot](./figures/IRKA_DAEs.png)
+
 ## Discussion of Results
 
 The numerical results show that the reduced-order model (ROM) does not fully match the behavior of the full-order model (FOM), particularly at higher frequencies.
