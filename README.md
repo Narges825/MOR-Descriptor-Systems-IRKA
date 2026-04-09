@@ -37,7 +37,7 @@ The classical IRKA method was applied first.
 Observations:
 
 * The approximation error increased rapidly with frequency.
-* Errors reached magnitudes up to approximately **10^^8**.
+* Errors reached magnitudes up to approximately **10^8**.
 * This behavior indicates a mismatch in the polynomial part of the transfer function.
 
 These results demonstrate limitations of standard IRKA when applied to descriptor systems.
