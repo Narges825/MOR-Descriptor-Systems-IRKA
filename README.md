@@ -102,9 +102,12 @@ The code generates:
 
 ## References
 
-This implementation is based on concepts from:
+This project is based on the following work:
 
-Gugercin, S., Antoulas, A.C., & Beattie, C.
-"A rational Krylov iteration for optimal H2 model reduction."
+Serkan Gugercin, Tatjana Stykel, and Sarah Wyatt
+**"Model Reduction of Descriptor Systems by Interpolatory Projection Methods"**
 
-Additional descriptor system extensions were considered for polynomial matching.
+The implemented methods follow the interpolatory model reduction framework described in this paper, including adaptations of IRKA for descriptor systems.
+
+System matrices and auxiliary routines used in the numerical experiments were provided by the original authors.
+
