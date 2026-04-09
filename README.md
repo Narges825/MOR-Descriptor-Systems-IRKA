@@ -113,15 +113,14 @@ These results demonstrate the limitations of standard IRKA when applied to descr
 A modified IRKA implementation using spectral projectors was applied to improve polynomial matching.
 
 Observations:
+![Error Plot](./figures/IRKA_DAEs.png)
+![Error Plot](./figures/IRKA_DAEs_WCF.png)
 
 - The approximation error was significantly reduced (approximately **1**)
 - The error remained bounded over a wider frequency range
 - However, a mismatch between ROM and FOM remained at higher frequencies
 
 ---
-
-## Observation
-![Error Plot](./figures/IRKA_DAEs.png)
 
 ## Discussion of Results
 
