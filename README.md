@@ -158,6 +158,8 @@ To run the simulations, the following proprietary components
 ```matlab
 main_IRKA
 
+---
+
 ## Discussion of Results
 
 The numerical results show that the reduced-order model (ROM) does not
