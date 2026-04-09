@@ -76,25 +76,15 @@ Typical experiment:
 * Descriptor systems from circuit models
 
 ---
-## Data and Projection Matrices
 
-* System matrices (E, A, B, C) and auxiliary routines for computing projection matrices (Pr, Pl) were provided by the original authors.
-* The function `rcl_ind2` generates these matrices and was provided by the authors.
-* These matrices represent descriptor systems from circuit models and are not trivially reproducible.
-* Generating synthetic matrices with the same spectral properties (symmetric-indefinite, eigenvalues in a specific range) is not feasible.
-* Consequently, the experiments cannot be fully reproduced without the original matrices.
-* All IRKA implementation and numerical experiments were performed using these provided matrices.
-
-## How to Run
-
-1. Open MATLAB.
-2. Load the main script:
-
-```matlab
-main_IRKA.m
-```
-
-3. Run the script to generate reduced-order models and error plots.
+## Execution & Requirements
+To run the simulations, the following proprietary components (provided by the original authors ) are required:
+* rcl_ind2.m: System generator for the circuit descriptor models.
+* Bode_500_10_1e8_1e-8.mat: Pre-computed spectral data for initialization.
+  
+Steps (if data is available):Ensure the proprietary files are in the MATLAB path.
+2. Run main_IRKA.m to execute the modified IRKA for DAEs.
+Note: Since the system matrices are not included for copyright reasons, please refer to the Results section to view the pre-generated performance plots.
 
 ---
 
