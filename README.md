@@ -12,26 +12,6 @@ This work was developed as part of a seminar on
 
 ---
 
-## Repository Structure
-
-The repository is organized as follows:
-
-MOR-Descriptor-Systems-IRKA/
-│
-├── src/
-│   ├── IRKA_WCF.m     % IRKA with spectral projectors (primary contribution)
-│   ├── IRKA_D.m       % Standard IRKA for descriptor systems
-│   └── main_IRKA.m    % Main execution script
-│
-├── figures/           % Pre-generated numerical results
-│   ├── (error plots)
-│   ├── (frequency response plots)
-│   └── (convergence plots)
-│
-└── README.md          % Project documentation
-
----
-
 ## Implemented Algorithms
 
 The repository contains multiple IRKA-based implementations designed for descriptor systems with singular matrices.
