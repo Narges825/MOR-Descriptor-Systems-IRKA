@@ -76,6 +76,14 @@ Typical experiment:
 * Descriptor systems from circuit models
 
 ---
+## Data and Projection Matrices
+
+* System matrices (E, A, B, C) and auxiliary routines for computing projection matrices (Pr, Pl) were provided by the original authors.
+* The function `rcl_ind2` generates these matrices and was provided by the authors.
+* These matrices represent descriptor systems from circuit models and are not trivially reproducible.
+* Generating synthetic matrices with the same spectral properties (symmetric-indefinite, eigenvalues in a specific range) is not feasible.
+* Consequently, the experiments cannot be fully reproduced without the original matrices.
+* All IRKA implementation and numerical experiments were performed using these provided matrices.
 
 ## How to Run
 
